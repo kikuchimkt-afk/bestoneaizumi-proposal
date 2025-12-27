@@ -1,0 +1,15 @@
+# System files
+.DS_Store
+Thumbs.db
+*.log
+
+# Node
+node_modules/
+.npm/
+
+# Local Env
+.env
+.env.local
+
+# Vercel
+.vercel

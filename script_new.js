@@ -300,15 +300,28 @@ const logoSelect = document.getElementById('logoSelect');
 if (typeof LOGO_FILES !== 'undefined' && logoSelect) {
     LOGO_FILES.forEach(file => {
         const opt = document.createElement('option');
-        opt.value = 'ロゴ/' + file;
+        opt.value = 'logo/' + file;
         opt.textContent = file;
         logoSelect.appendChild(opt);
     });
 
-    logoSelect.addEventListener('change', (e) => {
+    logoSelect.addEventListener('change', async (e) => {
         if (e.target.value) {
-            logoDataUrl = e.target.value; // Store relative path
-            if (logoUpload) logoUpload.value = ''; // Clear file input
+            try {
+                // Fetch and convert to Data URL to ensure it works in new window/about:blank
+                const response = await fetch(e.target.value);
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    logoDataUrl = reader.result;
+                    if (logoUpload) logoUpload.value = ''; // Clear file input
+                };
+                reader.readAsDataURL(blob);
+            } catch (err) {
+                console.error("Failed to load logo:", err);
+                alert("ロゴ画像の読み込みに失敗しました。");
+                logoDataUrl = '';
+            }
         } else {
             logoDataUrl = '';
         }

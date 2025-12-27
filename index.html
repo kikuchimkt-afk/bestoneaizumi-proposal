@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECCベストワン プロポーザル作成ツール</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+<script>
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+        var string = msg.toLowerCase();
+        var substring = "script error";
+        if (string.indexOf(substring) > -1) {
+            alert('Script Error: See Browser Console for Detail');
+        } else {
+            var message = [
+                'Message: ' + msg,
+                'URL: ' + url,
+                'Line: ' + lineNo,
+                'Column: ' + columnNo,
+                'Error object: ' + JSON.stringify(error)
+            ].join(' - ');
+            alert(message);
+        }
+        return false;
+    };
+</script>
+
+<body>
+
+    <div id="file-protocol-warning"
+        style="display:none; background:#ffdddd; color:red; padding:10px; margin-bottom:10px; border:1px solid red; font-weight:bold;">
+        ⚠️ 注意: HTMLファイルを直接開くと動作しません（Googleのセキュリティ制限）。<br>
+        付属の日本語マニュアル(README.md)「ツールの起動」に従い、簡易サーバー(http://localhost:8000等)経由でアクセスしてください。
+    </div>
+
+    <div id="no-print-ui" class="app-container">
+        <header class="tool-header">
+            <h1>ECCベストワン プロポーザル作成</h1>
+            <div class="api-key-container">
+                <div class="api-key-config">
+                    <label for="apiKey">Gemini API Key:</label>
+                    <input type="password" id="apiKey" placeholder="Enter API Key">
+                    <button id="saveKeyBtn">保存</button>
+                </div>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="api-link">🔑 APIキーを取得 (Google AI
+                    Studio)</a>
+                <p id="api-error-msg" style="color: red; display: none; margin: 5px 0 0 0; font-size: 0.9rem;">
+                    APIキーを入力してください</p>
+            </div>
+        </header>
+
+        <script>
+            // Check if opened via file:// protocol
+            if (window.location.protocol === 'file:') {
+                document.getElementById('file-protocol-warning').style.display = 'block';
+            }
+        </script>
+
+        <main class="tool-main">
+            <section id="setup-panel" class="panel">
+                <h2>1. 基本設定</h2>
+                <div class="form-group">
+                    <label>教室選択</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="school" value="aizumi" checked> ECCベストワン藍住</label>
+                        <label><input type="radio" name="school" value="kitajima"> ECCベストワン北島中央</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>学校ロゴ (任意)</label>
+                    <div style="display:flex; flex-direction:column; gap:5px;">
+                        <select id="logoSelect" style="padding:5px;">
+                            <option value="">サーバー上のロゴから選択...</option>
+                        </select>
+                        <div style="text-align:center; font-size:0.8rem;">または</div>
+                        <input type="file" id="logoUpload" accept="image/*">
+                    </div>
+                    <p style="font-size:0.8rem; color:#666; margin-top:5px;">※選択すると提案書のヘッダー画像を置き換えます</p>
+                </div>
+                <div class="form-group">
+                    <label>対象生徒</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="studentType" value="new" checked> 新規生</label>
+                        <label><input type="radio" name="studentType" value="current"> 在校生</label>
+                        <label><input type="radio" name="studentType" value="english"> 英会話</label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="padding-top:10px; border-top:1px dashed #ccc;">
+                    <label>参考資料 (PDFチラシ)</label>
+                    <p style="font-size:0.8rem; color:#666; margin:0 0 5px;">
+                        ※追加・削除時は「update_pdf_list.bat」を実行し、ページを再読み込みしてください。</p>
+                    <div id="pdf-list" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;"></div>
+                </div>
+                <button id="startQuestionsBtn" class="primary-btn">質問を開始</button>
+            </section>
+
+            <section id="questions-panel" class="panel hidden">
+                <h2>2. ヒアリング</h2>
+                <div id="dynamic-form">
+                    <!-- Questions will be injected here -->
+                </div>
+                <div class="actions" style="display:flex; gap:10px; justify-content:flex-end;">
+                    <button id="clearAllBtn" class="secondary-btn"
+                        style="background:#ffdddd; color:#d00; margin-right:auto;">入力を全てクリア</button>
+                    <button id="backToSetupBtn" class="secondary-btn">戻る</button>
+                    <button id="generateDetailedBtn" class="primary-btn" style="background-color: #e65100;">📝
+                        詳細レポート生成</button>
+                    <button id="generateBtn" class="primary-btn">プロポーザル生成</button>
+                </div>
+                <div id="loading" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Gemini 3.0 が思考中... 魅力的な提案書を構成しています。</p>
+                </div>
+            </section>
+
+            <section id="preview-panel" class="panel hidden">
+                <h2>3. プレビュー & 印刷</h2>
+                <div class="actions">
+                    <button id="backToQuestionsBtn" class="secondary-btn">修正する</button>
+                    <button id="printBtn" class="primary-btn">PDFとして保存/印刷</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- A4 Print Layout -->
+
+
+    <script src="pdf_list.js"></script>
+    <script src="logo_list.js"></script>
+    <script src="script_new.js?v=35"></script>
+</body>
+
+</html>

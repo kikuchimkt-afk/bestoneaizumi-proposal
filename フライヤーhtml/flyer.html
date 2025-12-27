@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>徳島県基礎学力テスト対策・徳島北重点版</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@500&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Base Settings */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #525252;
+            /* Darker background for screen contrast */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #1f2937;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* A4 Portrait Sheet Definition */
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            /* Ensure print safety margin visually on screen too */
+            box-sizing: border-box;
+        }
+
+        /* Custom Gradients & Utilities */
+        .bg-gradient-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .text-accent-blue {
+            color: #2563eb;
+        }
+
+        .border-left-accent {
+            border-left: 6px solid #2563eb;
+        }
+
+        /* Grid Pattern for Graph Area */
+        .graph-pattern {
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Print Specifics */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sheet {
+                width: 100%;
+                height: 100vh;
+                /* Force full height */
+                box-shadow: none;
+                margin: 0;
+                border: none;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0;
+                /* Remove browser default margins to control layout via CSS */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sheet">
+
+        <!-- 1. HEADER (Top 17%) - Reduced slightly to give space -->
+        <header
+            class="h-[17%] bg-gradient-header text-white px-8 flex flex-col justify-center relative overflow-hidden">
+            <!-- Decorative Circle -->
+            <div class="absolute -right-10 -top-10 w-64 h-64 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-2">
+                    <span
+                        class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded tracking-wider border border-blue-400/30">中3生対象</span>
+                    <span class="text-blue-200 text-sm font-bold tracking-widest uppercase">High School Entrance Exam
+                        Strategy</span>
+                </div>
+                <h1 class="text-[40px] font-black tracking-tight mb-2 leading-none">
+                    徳島県高校入試、<br>
+                    <span class="text-blue-400 text-6xl drop-shadow-lg">300点</span>が勝負の分水嶺。
+                </h1>
+                <p class="text-base text-slate-300 font-medium tracking-wide">
+                    <span class="text-white font-bold border-b-2 border-blue-400">徳島北</span>・城南・市立・城北など、人気校合格へのルート。
+                </p>
+            </div>
+        </header>
+
+        <!-- 2. DATA VISUALIZATION (Top Middle 36%) - Increased slightly -->
+        <section class="h-[36%] px-8 py-6 bg-white flex items-center justify-between border-b border-slate-100">
+            <div class="w-[42%] pr-4 flex flex-col justify-center h-full">
+                <h2 class="text-xl font-black text-slate-800 mb-4 border-left-accent pl-4 leading-tight">
+                    なぜ「380点」を目指すのか？<br>
+                    <span class="text-sm font-bold text-slate-500 mt-1 block">合格の先を見据えた戦略</span>
+                </h2>
+
+                <div class="space-y-3">
+                    <div>
+                        <h3 class="font-bold text-blue-700 text-sm mb-0.5 flex items-center gap-2">
+                            <span
+                                class="bg-blue-100 text-blue-700 w-5 h-5 flex items-center justify-center rounded-full text-xs shrink-0">1</span>
+                            300点の分水嶺
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-normal text-justify pl-7">
+                            ここを超えると基礎が定着した証となり、<strong>その後の成績上昇が高い確率で可能になります。</strong>まずはここを突破することで、一気に視界が開けます。
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-blue-700 text-sm mb-0.5 flex items-center gap-2">
+                            <span
+                                class="bg-blue-100 text-blue-700 w-5 h-5 flex items-center justify-center rounded-full text-xs shrink-0">2</span>
+                            合格最低ライン 320点
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-normal text-justify pl-7">
+                            徳島北（普通）・城南・市立・城北の<strong>実質的な合格最低ライン</strong>です。300点を超えた上昇気流に乗り、このラインを確実にクリアします。
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-blue-700 text-sm mb-0.5 flex items-center gap-2">
+                            <span
+                                class="bg-blue-100 text-blue-700 w-5 h-5 flex items-center justify-center rounded-full text-xs shrink-0">3</span>
+                            国公立大への切符 380点
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-normal text-justify pl-7">
+                            <strong>入学時に中央以上の成績を取り、国公立大学を目指す</strong>ためには、入試時点で380点以上の学力が必要です。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Area -->
+            <!-- Scale Logic Reconfirmed: 150(bottom) to 450(top) = Range 300 -->
+            <!-- 200 = 16.6%, 300 = 50%, 320 = 56.6%, 380 = 76.6%, 400 = 83.3% -->
+            <div
+                class="w-[58%] h-full bg-slate-50 rounded-2xl relative overflow-hidden border border-slate-200 graph-pattern shadow-inner">
+                <div class="absolute inset-0 w-full h-full">
+
+                    <!-- Y-Axis Labels -->
+                    <div class="absolute left-2 h-full flex flex-col w-10 z-20">
+                        <span class="absolute bottom-[83.3%] text-[10px] text-slate-400 font-mono font-bold">400</span>
+                        <span
+                            class="absolute bottom-[76.6%] text-sm text-blue-600 font-black font-mono transform translate-y-1/2 drop-shadow-sm">380</span>
+                        <span
+                            class="absolute bottom-[56.6%] text-xs text-slate-600 font-bold font-mono transform translate-y-1/2">320</span>
+                        <span
+                            class="absolute bottom-[50%] text-[10px] text-slate-400 font-bold font-mono transform translate-y-1/2">300</span>
+                        <span
+                            class="absolute bottom-[16.6%] text-[10px] text-slate-400 font-mono transform translate-y-1/2">200</span>
+                    </div>
+
+                    <!-- Graph Body (offset for axis) -->
+                    <div class="absolute left-10 right-0 h-full">
+
+                        <!-- Zone: Aim for National Univ (380+) -->
+                        <!-- Bottom starts at 380 (76.6%) -->
+                        <div
+                            class="absolute bottom-[76.6%] left-0 right-0 top-0 bg-yellow-50/60 border-b-2 border-yellow-300 flex flex-col justify-end items-end px-3 pb-2">
+                            <div
+                                class="bg-yellow-100/95 px-2 py-1 rounded shadow-sm border border-yellow-200 text-right z-10">
+                                <span class="text-xs font-bold text-yellow-800 block leading-tight">国公立大を目指す上位層</span>
+                                <span
+                                    class="text-[9px] text-yellow-700 font-medium block leading-tight">入学時に中央以上の順位を確保</span>
+                            </div>
+                        </div>
+
+                        <!-- Zone: Target School Min Line (320-380) -->
+                        <!-- Bottom 320 (56.6%) to Top (100-76.6 = 23.4%) -->
+                        <div
+                            class="absolute bottom-[56.6%] height-[10%] top-[23.4%] left-0 right-0 bg-blue-100/40 border-y border-blue-200 flex items-center justify-end px-3">
+                            <div class="text-right leading-tight py-1">
+                                <span class="text-[11px] font-black text-blue-800 block">合格最低ライン</span>
+                                <span class="text-[9px] font-bold text-blue-600">徳島北(普通)/城南/市立/城北</span>
+                            </div>
+                        </div>
+
+                        <!-- Zone: The Gap (300-320) -->
+                        <div
+                            class="absolute bottom-[50%] top-[43.4%] left-0 right-0 bg-slate-100/50 flex items-center justify-center">
+                            <span
+                                class="text-[9px] text-slate-400 font-bold tracking-widest uppercase opacity-70">Border
+                                Zone</span>
+                        </div>
+
+                        <!-- Line: Watershed (300) -->
+                        <div
+                            class="absolute bottom-[50%] left-0 w-full h-px border-t-2 border-dashed border-slate-500 z-10">
+                        </div>
+                        <div
+                            class="absolute bottom-[50%] left-0 -mb-3 bg-slate-600 text-white px-2 py-0.5 rounded-r text-[10px] font-bold z-10 shadow-md">
+                            分水嶺 (300点)
+                        </div>
+
+                        <!-- Breakthrough Indicator -->
+                        <!-- Adjusted position to be clear of the curve -->
+                        <div
+                            class="absolute bottom-[54%] left-[20%] flex items-center gap-1 animate-pulse z-20 bg-white/90 rounded-full px-2 py-0.5 border border-red-100 shadow-sm">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-red-500"></i>
+                            <span class="text-red-600 text-[10px] font-bold whitespace-nowrap">上昇加速！</span>
+                        </div>
+
+                        <!-- Zone: Foundation (Below 300) -->
+                        <div
+                            class="absolute bottom-0 top-[50%] left-0 right-0 flex flex-col items-center justify-center gap-2">
+                            <span
+                                class="text-sm font-bold text-slate-400 tracking-widest border-b border-slate-300 pb-1">基礎固めゾーン</span>
+                            <span
+                                class="text-[10px] text-slate-500 bg-white/60 px-3 py-1 rounded-full border border-slate-200">まずはここを脱出</span>
+                        </div>
+
+                        <!-- Arrow Curve representing growth -->
+                        <!-- M30,230 (Start low) -> Q110,210 130,150 (Accelerate at 300) -> T230,50 (Steep rise to 380+) -->
+                        <svg class="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
+                            preserveAspectRatio="none">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#ef4444" />
+                                </marker>
+                            </defs>
+                            <path d="M30,230 Q110,210 130,150 T230,50" fill="none" stroke="#ef4444" stroke-width="4"
+                                marker-end="url(#arrowhead)" stroke-dasharray="8,4" stroke-linecap="round" />
+                        </svg>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. STRATEGY CARDS (Middle 27%) - Adjusted padding -->
+        <section class="h-[27%] px-8 py-5 bg-slate-50 flex flex-col justify-center">
+            <h2 class="text-center text-xl font-bold text-slate-800 mb-4">
+                <span class="border-b-4 border-blue-500/30 px-2 pb-1">現在地から選ぶ</span>、2つの合格戦略
+            </h2>
+
+            <div class="grid grid-cols-2 gap-6 h-[75%]">
+                <!-- Card 1: Premium Individual -->
+                <div
+                    class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 relative overflow-hidden group flex flex-col justify-between">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="bg-blue-100 p-2 rounded-lg text-blue-600 shrink-0">
+                                <i data-lucide="crown" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-blue-600 block mb-0.5">380点以上を目指す</span>
+                                <h3 class="font-black text-xl text-slate-800 leading-none tracking-tight">プレミアム個別</h3>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-2 font-medium leading-relaxed">
+                            徳島北・城南へ上位合格し、<br>国公立大を目指すハイレベル講座。
+                        </p>
+                    </div>
+                    <ul class="space-y-1.5">
+                        <li class="flex items-start gap-2 text-xs font-bold text-slate-700">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 shrink-0"></i>
+                            <span>応用問題での得点力強化</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-xs font-bold text-slate-700">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 shrink-0"></i>
+                            <span>高校内容の先取り学習</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: Strategy Group -->
+                <div
+                    class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 relative overflow-hidden group flex flex-col justify-between">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-green-500"></div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600 shrink-0">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold text-green-600 block mb-0.5">まずは300点突破</span>
+                                <h3 class="font-black text-xl text-slate-800 leading-none tracking-tight">戦略グループ講座</h3>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-2 font-medium leading-relaxed">
+                            基礎固めゾーンを脱出し、<br>合格ラインへ押し上げる集中特訓。
+                        </p>
+                    </div>
+                    <ul class="space-y-1.5">
+                        <li class="flex items-start gap-2 text-xs font-bold text-slate-700">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0"></i>
+                            <span>頻出パターンの徹底反復</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-xs font-bold text-slate-700">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0"></i>
+                            <span>5教科の基礎を効率よく総復習</span>
+                        </li>
+                        <!-- App Badges Integrated -->
+                        <li class="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100">
+                            <div class="flex gap-1 justify-center w-full">
+                                <span
+                                    class="text-[9px] bg-green-50 border border-green-200 text-green-800 px-1.5 py-0.5 rounded">基礎学最前線</span>
+                                <span
+                                    class="text-[9px] bg-green-50 border border-green-200 text-green-800 px-1.5 py-0.5 rounded">中学理社攻略</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. FOOTER CTA (Bottom 20%) - Reduced height -->
+        <footer class="h-[20%] bg-white px-8 py-6 flex flex-col justify-center border-t border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-7/12">
+                    <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">
+                        新学期4月スタート生、受付中。
+                    </h2>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        成績表をお持ちください。<br>
+                        志望校合格に必要な「距離」と「戦略」を明確にします。
+                    </p>
+                </div>
+                <!-- Call Action -->
+                <div class="w-5/12 text-right">
+                    <div
+                        class="inline-flex items-center gap-4 bg-slate-900 text-white px-8 py-4 rounded-xl shadow-xl hover:bg-slate-800 transition-colors cursor-pointer">
+                        <i data-lucide="phone" class="w-6 h-6"></i>
+                        <span class="text-3xl font-mono font-bold tracking-tighter">00-0000-0000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Info -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-slate-500">
+                <div class="flex gap-6 text-xs font-bold tracking-wide">
+                    <span>受付時間 14:00〜22:00</span>
+                    <span>日・祝除く</span>
+                    <span class="text-blue-600 bg-blue-50 px-2 rounded">※体験授業随時受付中</span>
+                </div>
+                <!-- Live QR Code -->
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold">Webからの予約・お問い合わせ</span>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sites.google.com/view/kyousitu-po-taru/%E3%83%9B%E3%83%BC%E3%83%A0"
+                        alt="Portal QR" class="w-10 h-10 object-contain border border-slate-200 p-1 rounded">
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

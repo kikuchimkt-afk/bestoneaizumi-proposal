@@ -1,0 +1,474 @@
+/* Base Reset & Variables */
+:root {
+    --primary-color: #0095d9;
+    /* ECC Blue-ish */
+    --secondary-color: #f39800;
+    /* Accent Orange */
+    --text-color: #333;
+    --bg-color: #f4f7f6;
+    --print-bg: #fff;
+    --panel-bg: #ffffff;
+    --a4-width: 210mm;
+    --a4-height: 297mm;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+/* Tool UI (Screen Only) */
+.app-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.tool-header h1 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.api-key-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.api-key-config {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.api-link {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    margin-top: 5px;
+    text-decoration: none;
+}
+
+.api-link:hover {
+    text-decoration: underline;
+}
+
+.panel {
+    background: var(--panel-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.radio-group label {
+    margin-right: 1.5rem;
+    cursor: pointer;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #0077b0;
+}
+
+.secondary-btn {
+    background-color: #ccc;
+    color: #333;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Custom Inputs: Score Input (Horizontal) */
+.score-input-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.score-item {
+    flex: 1;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.score-item label {
+    font-size: 0.85rem;
+    font-weight: normal;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.score-item input {
+    text-align: center;
+}
+
+/* Custom Inputs: Proposal Builder */
+.proposal-builder {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+.proposal-list {
+    margin-bottom: 10px;
+}
+
+.proposal-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.proposal-row select {
+    flex: 1;
+}
+
+.delete-row-btn {
+    background: #ff4d4d;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+.add-row-btn {
+    background: #4CAF50;
+    color: white;
+    width: 100%;
+    margin-top: 5px;
+}
+
+
+/* Print Layout (A4) */
+#print-area {
+    width: var(--a4-width);
+    /* height: var(--a4-height); REMOVED fixed height to allow flexible content unless strictly needed */
+    min-height: var(--a4-height);
+    background: var(--print-bg);
+    margin: 2rem auto;
+    padding: 15mm;
+    /* Standard margin */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-family: 'Noto Serif JP', serif;
+    /* More formal for print */
+}
+
+.print-header {
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.school-logo {
+    font-size: 24pt;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.school-sub {
+    margin: 0;
+    font-size: 10pt;
+    color: #666;
+}
+
+.doc-info {
+    text-align: right;
+}
+
+.doc-date {
+    font-size: 10pt;
+    margin: 0;
+}
+
+.doc-title {
+    font-size: 18pt;
+    margin: 5px 0;
+    font-weight: 700;
+}
+
+.student-name {
+    font-size: 16pt;
+    font-weight: bold;
+    margin: 0;
+    border-bottom: 1px solid #333;
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.print-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    flex-grow: 1;
+    align-content: start;
+}
+
+.content-block {
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    padding: 10px;
+    background: #fff;
+}
+
+.content-block h3 {
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 11pt;
+    padding: 4px 8px;
+    margin: -10px -10px 10px -10px;
+    font-weight: bold;
+}
+
+/* Intro and Message usually take full width */
+.intro-box,
+.message-box {
+    grid-column: 1 / -1;
+}
+
+.content-block p,
+.content-block li {
+    font-size: 10.5pt;
+    line-height: 1.6;
+    margin-bottom: 0.5em;
+}
+
+/* High Density Typography */
+strong {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.print-footer {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    color: #666;
+}
+
+/* Custom Inputs: Strategy & Checkboxes */
+.strategy-select,
+.impression-select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.checkbox-group-container {
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.checkbox-group-container label {
+    padding: 4px;
+    transition: background 0.2s;
+}
+
+.checkbox-group-container label:hover {
+    background-color: #e6f7ff;
+    border-radius: 4px;
+}
+
+/* Print Logic */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        background: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .form-group.half-width {
+        /* Fallback for layout */
+    }
+
+    /* Horizontal Layout Helper */
+    @media (min-width: 768px) {
+        .row-group {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .row-group .form-group {
+            flex: 1;
+            min-width: 0;
+            /* Prevent overflow */
+            margin-bottom: 0;
+        }
+    }
+
+    /* Custom Option Management UI */
+    .custom-add-row {
+        margin-top: 8px;
+        display: flex;
+        gap: 5px;
+    }
+
+    .delete-item-btn {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+        margin-left: 5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .delete-item-btn:hover {
+        background: #ff4d4d;
+    }
+
+    .custom-list-preview {
+        margin-top: 5px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .custom-tag {
+        display: inline-flex;
+        align-items: center;
+        background: #eee;
+        padding: 2px 6px;
+        border-radius: 12px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    #no-print-ui,
+    #file-protocol-warning {
+        display: none !important;
+    }
+
+    #print-area {
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
+        page-break-after: always;
+    }
+}
+
+/* PDF Link Button Style */
+.pdf-link-btn {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.pdf-link-btn:hover {
+    background: #eef;
+    border-color: #aaf;
+    color: #00f;
+}

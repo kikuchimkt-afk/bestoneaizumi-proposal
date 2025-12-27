@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Newsletter Style - Information Rich</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Shippori Mincho', serif;
+            background: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .sheet {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: none;
+            }
+
+            .sheet {
+                width: 100%;
+                height: 100%;
+                box-shadow: none;
+            }
+        }
+
+        .paper-texture {
+            background-color: #faf9f6;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+
+<body class="text-slate-800">
+    <div class="sheet paper-texture p-10">
+
+        <!-- Header: Editorial Style -->
+        <header class="border-b-4 border-slate-800 pb-4 mb-6">
+            <div class="flex justify-between items-end mb-2">
+                <span class="bg-slate-800 text-white px-3 py-1 text-xs font-bold tracking-widest">徳島県高校入試 特別レポート
+                    2026</span>
+                <span class="text-xs text-slate-500 font-bold">保護者様・新中3生へ</span>
+            </div>
+            <h1 class="text-4xl font-black leading-tight mb-3">
+                なぜ、<span class="text-red-700 border-b-4 border-red-200">300点</span>取れる生徒だけが<br>
+                徳島北・城南へ「安全」に届くのか？
+            </h1>
+            <p class="text-sm font-medium leading-7 text-justify">
+                多くの生徒が「なんとなく」5教科を勉強し、伸び悩みます。しかし、データは嘘をつきません。普通科上位校の合否を分けるのは、基礎学力検査における明確な「分水嶺」の突破です。本レポートでは、確実に合格ラインへ到達するための「ロジック」を公開します。
+            </p>
+        </header>
+
+        <!-- Main Logic: 3 Columns Text-Heavy -->
+        <div class="grid grid-cols-3 gap-6 mb-8">
+            <article>
+                <h2 class="font-bold text-lg border-l-4 border-slate-800 pl-3 mb-3">01. 300点の壁</h2>
+                <p class="text-xs leading-5 text-slate-600 mb-2">
+                    基礎学力テスト300点未満の層は、基礎知識の欠落が点在しています。この状態で演習量を増やしても、「穴の開いたバケツ」に水を注ぐようなもの。
+                </p>
+                <p class="text-xs font-bold leading-5">
+                    まずは300点を確実に超えること。これが全てのスタートラインであり、ここを超えない限り上位校合格の確率は極めて低いのが現実です。
+                </p>
+            </article>
+            <article>
+                <h2 class="font-bold text-lg border-l-4 border-blue-700 pl-3 mb-3">02. 320点の安全圏</h2>
+                <p class="text-xs leading-5 text-slate-600 mb-2">
+                    徳島北（普通）・城南・市立の合格者平均ではなく「最低ライン」を見据えると、320点が実質的なボーダーです。
+                </p>
+                <p class="text-xs font-bold leading-5">
+                    一発勝負の入試で心を安定させるのは「過去の成功体験」のみ。基礎学で320点を「当たり前」にする指導が不可欠です。
+                </p>
+            </article>
+            <article>
+                <h2 class="font-bold text-lg border-l-4 border-red-700 pl-3 mb-3">03. 380点の未来</h2>
+                <p class="text-xs leading-5 text-slate-600 mb-2">
+                    高校合格はゴールではありません。徳島北や城南に入学後、国公立大学を目指すには学年中央以上の順位が必要です。
+                </p>
+                <p class="text-xs font-bold leading-5">
+                    そのための指標が入試時点での380点。ここまで引き上げて初めて「勝利」と言えます。
+                </p>
+            </article>
+        </div>
+
+        <!-- Solution: Hybrid Strategy (Charts) -->
+        <section class="bg-white border border-slate-200 p-6 shadow-sm mb-6">
+            <h3 class="text-center font-bold text-xl mb-6 decorated-title">
+                <span class="bg-slate-800 text-white px-6 py-1">解決策：説明不要のハイブリッド戦略</span>
+            </h3>
+
+            <div class="flex gap-8">
+                <!-- Left: Premium Individual -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="crosshair" class="w-8 h-8 text-blue-700"></i>
+                        <div>
+                            <h4 class="font-bold text-lg text-blue-800">プレミアム個別指導</h4>
+                            <p class="text-[10px] text-slate-500">（数学・英語・理科）</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                        集団授業では見過ごされる「個人の弱点」をピンポイントで修復。特に積み上げ教科（数・英）は、躓きの原因まで遡行学習しなければ点数は伸びません。講師固定制で、380点到達まで伴走します。
+                    </p>
+                    <ul class="text-xs font-bold space-y-1 text-blue-900 bg-blue-50 p-3 rounded">
+                        <li>・ 思考力を問う「応用問題」対策</li>
+                        <li>・ 高校内容を見据えた「先取り」</li>
+                    </ul>
+                </div>
+
+                <!-- Separator -->
+                <div class="w-px bg-slate-300 relative">
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-slate-400 font-serif italic text-lg py-2">
+                        ×</div>
+                </div>
+
+                <!-- Right: Strategy Group -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="layers" class="w-8 h-8 text-red-700"></i>
+                        <div>
+                            <h4 class="font-bold text-lg text-red-800">戦略グループ講座</h4>
+                            <p class="text-[10px] text-slate-500">（5教科フルサポート）</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-700 mb-3 leading-relaxed">
+                        「わかったつもり」を排除する演習特化型講座。基礎学の過去問分析に基づき、頻出パターンを徹底反復。さらに、独自開発アプリで「暗記」と「理社」の穴を完全に塞ぎます。
+                    </p>
+                    <div class="flex gap-2 mb-2">
+                        <span
+                            class="bg-red-50 border border-red-100 text-red-800 px-2 py-1 text-[10px] font-bold rounded">アプリ：基礎学最前線</span>
+                        <span
+                            class="bg-red-50 border border-red-100 text-red-800 px-2 py-1 text-[10px] font-bold rounded">アプリ：理社完全攻略</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer: Action -->
+        <footer class="mt-auto border-t-4 border-double border-slate-300 pt-6 flex justify-between items-center">
+            <div class="flex-1">
+                <p class="font-bold text-lg mb-1">その勉強法で、300点を超えていますか？</p>
+                <p class="text-xs text-slate-600">
+                    もし「No」なら、方法を変える必要があります。<br>
+                    まずは成績表をお持ちください。現状と合格までの「距離」を数値化します。
+                </p>
+            </div>
+            <div class="flex items-center gap-4 bg-slate-100 p-4 rounded-lg">
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-slate-500">お問い合わせ・学習相談</p>
+                    <p class="text-2xl font-bold font-sans tracking-tighter">00-0000-0000</p>
+                </div>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sites.google.com/view/kyousitu-po-taru/%E3%83%9B%E3%83%BC%E3%83%A0"
+                    class="w-16 h-16 border border-white">
+            </div>
+        </footer>
+
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

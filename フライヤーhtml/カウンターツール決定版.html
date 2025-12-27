@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Style - Ver3 (Continuous Text)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Global Scrollbar Hide */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .sheet {
+            width: 297mm;
+            height: 210mm;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 8mm;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+
+            .sheet {
+                width: 100%;
+                height: 100vh;
+                box-shadow: none;
+                padding: 6mm;
+                margin: 0;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+
+        /* Utility */
+        .no-scroll {
+            overflow: hidden !important;
+        }
+
+        /* Title Box */
+        .title-box {
+            background-color: #fffbeb;
+            border: 3px solid #f59e0b;
+            color: #78350f;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px #fcd34d;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Section Containers */
+        .section-container {
+            border-radius: 6px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            border-width: 2px;
+            border-style: solid;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 900;
+            font-size: 1rem;
+            margin-bottom: 2px;
+            padding: 2px 4px;
+            flex-shrink: 0;
+        }
+
+        .header-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        /* Colors */
+        .theme-red {
+            background-color: #fff1f2;
+            border-color: #fca5a5;
+        }
+
+        .header-red {
+            color: #991b1b;
+            background-color: #fee2e2;
+        }
+
+        .icon-red {
+            background-color: #ef4444;
+        }
+
+        .theme-blue {
+            background-color: #eff6ff;
+            border-color: #93c5fd;
+        }
+
+        .header-blue {
+            color: #1e40af;
+            background-color: #dbeafe;
+        }
+
+        .icon-blue {
+            background-color: #3b82f6;
+        }
+
+        .theme-green {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .header-green {
+            color: #166534;
+            background-color: #dcfce7;
+        }
+
+        .icon-green {
+            background-color: #22c55e;
+        }
+
+        .theme-purple {
+            background-color: #faf5ff;
+            border-color: #d8b4fe;
+        }
+
+        .header-purple {
+            color: #6b21a8;
+            background-color: #f3e8ff;
+        }
+
+        .icon-purple {
+            background-color: #a855f7;
+        }
+
+        .theme-yellow {
+            background-color: #fffbeb;
+            border-color: #fcd34d;
+        }
+
+        /* Typography optimizations */
+        /* Left Column */
+        .text-dense-left {
+            font-size: 7.5pt;
+            line-height: 1.4;
+            text-align: justify;
+            letter-spacing: -0.02em;
+        }
+
+        /* 
+           Center Column Adjustment: 
+           Decreased to 8.0pt and line-height 1.48 to fix the slight cutoff of the last line.
+        */
+        .text-bureaucratic {
+            font-size: 8.0pt;
+            line-height: 1.48;
+            text-align: justify;
+            letter-spacing: -0.015em;
+        }
+
+        .text-hero {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        /* Grid */
+        .grid-main {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 6px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .col-left {
+            grid-column: span 4;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            height: 100%;
+        }
+
+        .col-center {
+            grid-column: span 5;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            height: 100%;
+        }
+
+        .col-right {
+            grid-column: span 3;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            height: 100%;
+        }
+
+        /* Boxes */
+        .white-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 5px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            height: 100%;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #cbd5e1;
+            padding: 3px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.25;
+        }
+
+        .comparison-table th {
+            background: #f1f5f9;
+            white-space: nowrap;
+        }
+
+        /* Process Flow */
+        .flow-container {
+            display: flex;
+            gap: 3px;
+            flex: 1;
+            align-items: stretch;
+            min-height: 0;
+        }
+
+        .phase-box {
+            background: white;
+            border: 1px solid;
+            border-radius: 4px;
+            padding: 4px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sheet">
+
+        <!-- Header (10%) -->
+        <div class="h-[10%] shrink-0 mb-2">
+            <div class="title-box flex-row items-center justify-between">
+                <div class="flex-1 overflow-visible h-full flex flex-col justify-center">
+                    <div
+                        class="text-[10px] font-bold tracking-widest leading-none text-amber-900 pb-0.5 inline-block mb-1">
+                        ■ 令和8年度 高校入試対策に関する構造分析・是正措置案 (最終版)</div>
+                    <h1
+                        class="text-[1.85rem] font-black leading-none tracking-tight text-slate-800 whitespace-nowrap overflow-visible">
+                        基礎学力テスト<span class="text-red-600 border-b-[4px] border-red-200 mx-1">300点の壁</span>の構造的障壁と<span
+                            class="text-blue-600 border-b-[4px] border-blue-200 mx-1">380点</span>到達への具体的工程表
+                    </h1>
+                </div>
+                <div class="text-right shrink-0">
+                    <div
+                        class="text-[8px] font-bold border border-amber-500 bg-white px-2 py-0.5 inline-block mb-0.5 rounded shadow-sm">
+                        Ref: 2026-v3-REV2</div>
+                    <div class="font-bold text-sm text-slate-700 leading-none">ベストワン<br>進学分析室</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content (89%) -->
+        <div class="h-[89%] grid-main">
+
+            <!-- LEFT (Analysis & Goals) -->
+            <div class="col-left">
+                <!-- Analysis (58%) -->
+                <div class="section-container theme-red h-[58%]">
+                    <div class="section-header header-red">
+                        <div class="header-icon icon-red">1</div>
+                        現状分析：300点の壁とその背景
+                    </div>
+
+                    <div class="white-box border-red-200 mb-1.5 !flex-none">
+                        <h3 class="text-label text-red-700 mb-0.5 border-b border-red-100 pb-0.5">得点分布の歪みと「壁」の存在</h3>
+                        <p class="text-dense-left text-slate-700">
+                            データ分析の結果、基礎学力テスト300点付近に明確な「壁」が存在する。これ未満の生徒層は、単なる演習不足ではなく、中1・2の重要単元（英単語・理社用語・計算規則）の未定着が複合的に絡み合っており、従来の学習法では自力での脱出が極めて困難な「停滞領域」にある。
+                        </p>
+                    </div>
+
+                    <div class="white-box border-red-200 flex-1 min-h-0 !justify-start no-scroll">
+                        <h3 class="text-label text-red-700 mb-1 border-b border-red-100 pb-0.5">停滞を生む3つの構造的要因</h3>
+                        <!-- Spacing optimized for Ver3 -->
+                        <div class="flex-1 flex flex-col justify-between pt-1 pb-0.5">
+                            <div class="text-dense-left text-slate-700 leading-snug">
+                                <strong class="block text-[8pt] text-red-800 border-l-2 border-red-400 pl-1 mb-0.5">1.
+                                    知識の断片化（Semantic Fragmentation）</strong>
+                                用語や公式を文脈から乖離した「点」として丸暗記しているため、問われ方が変わる応用問題（線）に対応できない。結果、記憶の保持期間も著しく短縮化する。
+                            </div>
+                            <div class="text-dense-left text-slate-700 leading-snug">
+                                <strong class="block text-[8pt] text-red-800 border-l-2 border-red-400 pl-1 mb-0.5">2.
+                                    学習習慣の形骸化（Ritualized Learning）</strong>
+                                机に向かってノートを埋める行為自体が目的化し、脳に知的負荷（Load）のかからない「作業」に終始している。成果が伴わず学習性無力感に陥るリスクが高い。
+                            </div>
+                            <div class="text-dense-left text-slate-700 leading-snug">
+                                <strong class="block text-[8pt] text-red-800 border-l-2 border-red-400 pl-1 mb-0.5">3.
+                                    時間管理の破綻（Resource Misallocation）</strong>
+                                本番での配分ミスにより、正答可能な問題を落としている。根本原因は基礎計算速度の遅滞であり、これを放置したままの演習は投資対効果が極めて薄い。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goals (42%) -->
+                <div class="section-container theme-blue h-[42%]">
+                    <div class="section-header header-blue">
+                        <div class="header-icon icon-blue">2</div>
+                        目標設定：具体的数値目標
+                    </div>
+                    <div class="flex flex-col gap-1 h-full min-h-0">
+                        <!-- MUST Box -->
+                        <div
+                            class="white-box border-blue-200 flex flex-row items-stretch shadow-sm overflow-hidden p-1">
+                            <div
+                                class="w-[28%] flex flex-col justify-center items-center shrink-0 border-r border-slate-100 pr-1 gap-0.5">
+                                <span
+                                    class="text-[10pt] font-black bg-blue-100 text-blue-800 px-3 py-1 rounded shadow-sm w-full text-center">MUST</span>
+                                <div
+                                    class="text-[8pt] font-bold text-slate-500 leading-none text-center transform scale-90">
+                                    合格安全圏</div>
+                            </div>
+                            <div class="flex-1 pl-2 flex flex-col justify-center gap-1 min-w-0">
+                                <div class="text-hero text-blue-700 text-[2.2rem] leading-none text-center">
+                                    320<span class="text-lg text-slate-500 font-normal ml-1">点</span></div>
+                                <p class="text-[7.5pt] text-slate-700 leading-tight text-justify">
+                                    徳島北(普通)・城南・市立への出願において最低限確保すべきライン。これを下回ると不合格リスクが指数関数的に増大する。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- GOAL Box -->
+                        <div
+                            class="white-box border-blue-200 flex flex-row items-stretch shadow-sm flex-1 relative overflow-hidden p-1">
+                            <div
+                                class="absolute right-0 top-0 w-8 h-8 bg-yellow-400 transform rotate-45 translate-x-4 -translate-y-4 shadow opacity-80 z-10">
+                            </div>
+                            <div
+                                class="w-[28%] flex flex-col justify-center items-center shrink-0 border-r border-slate-100 pr-1 gap-0.5">
+                                <span
+                                    class="text-[10pt] font-black bg-red-100 text-red-800 px-3 py-1 rounded shadow-sm w-full text-center">GOAL</span>
+                                <div
+                                    class="text-[8pt] font-bold text-slate-500 leading-none text-center transform scale-90">
+                                    進学準備</div>
+                            </div>
+                            <div class="flex-1 pl-2 relative z-0 flex flex-col justify-center gap-1 min-w-0">
+                                <div class="text-hero text-red-600 text-[2.5rem] leading-none text-center">
+                                    380<span class="text-lg text-slate-500 font-normal ml-1">点</span></div>
+                                <p class="text-[7.5pt] text-slate-700 leading-tight text-justify font-bold">
+                                    入学後の中央順位維持と国公立現役合格への権利獲得に必須のスコア。先取り学習なき高校進学は苦戦を強いられる。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTER (Solution) -->
+            <div class="col-center">
+                <div class="section-container theme-green h-full">
+                    <div class="section-header header-green">
+                        <div class="header-icon icon-green">3</div>
+                        解決策：ハイブリッド戦略の導入効果
+                    </div>
+
+                    <!-- HIGH DENSITY BUREAUCRATIC TEXT - Continuous, No Break, Optimized fit -->
+                    <div
+                        class="white-box border-green-200 mb-1.5 p-1.5 shrink-0 bg-green-50/30 !flex-[1.4] !justify-start no-scroll">
+                        <h4 class="text-[8pt] font-black text-green-900 border-b border-green-200 mb-0.5">■
+                            従来型「5教科指導」の構造的限界と本施策の論理的優位性</h4>
+                        <p class="text-bureaucratic text-slate-800 text-justify tracking-tight">
+                            従来の学習塾における「5教科一律指導」は、表面的には網羅性を担保しているように見えるが、その実態は「学習リソースの非効率な分散」に他ならない。特に基礎学力300点未満の層において、理解度が異なる全科目を均等な時間配分で指導することは、得意科目の伸長を阻害しつつ、苦手科目の根本解決を先送りするという二重の損失（Double
+                            Loss）を招いている。集団授業では個別のつまずきに対するフィードバックが物理的に不足し、自立学習（自習）においては誤った解法の固定化を招くリスクが高い。本施策における<strong
+                                class="text-green-800">「ハイブリッド戦略」</strong>は、このトレードオフを解消するために設計された。思考力と深い理解を要する単元には「個別指導（Deep
+                            Dive）」を、膨大な知識量を要する単元には「グループ講座（Coverage）」を適用する。この機能の分離と再統合（Unbundling &
+                            Rebundling）こそが、限られた受験期間において最大効率の成果を創出する唯一の解である。さらに、この分化は講師の専門性を極限まで高める副次的効果も生み、個別講師は技術指導に特化し、グループ講師は伝達技術に特化することで、指導品質の構造的担保を実現している。
+                        </p>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div
+                        class="flex-1 bg-white mb-1.5 p-0 overflow-hidden rounded border border-green-200 shrink-0 h-[22%]">
+                        <table class="comparison-table text-slate-700">
+                            <tr class="bg-gray-100 text-[8pt] font-bold">
+                                <th class="w-[20%]">比較項目</th>
+                                <th class="w-[30%] text-slate-500">従来型 (一般的学習塾)</th>
+                                <th class="w-[50%] bg-red-50 text-red-700 border-red-200">本施策 (ハイブリッド型)</th>
+                            </tr>
+                            <tr>
+                                <th class="bg-gray-50 text-[8.5pt]">弱点克服<br><span
+                                        class="text-[7px] font-normal text-slate-400">思考力領域</span></th>
+                                <td class="text-[8pt]">カリキュラム固定<br>個人の穴は放置</td>
+                                <td class="bg-green-50 text-left px-2 border-l-4 border-green-500">
+                                    <div class="text-[9pt] font-bold text-green-800">■ プレミアム個別</div>
+                                    <div class="text-[7.5pt] leading-tight mt-0.5">数英理のボトルネックを即座に特定・修正。</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="bg-gray-50 text-[8.5pt]">基礎定着<br><span
+                                        class="text-[7px] font-normal text-slate-400">暗記領域</span></th>
+                                <td class="text-[8pt]">自習・宿題依存<br>歩留まりの悪化</td>
+                                <td class="bg-green-50 text-left px-2 border-l-4 border-green-500">
+                                    <div class="text-[9pt] font-bold text-green-800">■ 戦略グループ</div>
+                                    <div class="text-[7.5pt] leading-tight mt-0.5">頻出パターンの機械的反復と完全暗記。</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="text-[9.5pt] font-bold text-green-800 mb-0.5 px-0.5 border-b border-green-200">
+                        成績向上の具体的プロセス管理</div>
+                    <div class="flow-container flex-1">
+                        <!-- Phase 1 -->
+                        <div class="phase-box bg-gray-50 border-gray-300">
+                            <div
+                                class="text-center border-b border-gray-300 pb-0.5 mb-1 font-black text-[9pt] text-gray-700 bg-gray-100">
+                                Phase 1: 現状</div>
+                            <div
+                                class="bg-white p-1 rounded border border-gray-100 text-[7.5pt] text-gray-700 leading-snug h-full text-justify flex-1">
+                                漠然とした不安の中にあり、「何がわからないか」すら言語化できない状態。模試スコアは250-280点で推移し、学校の授業進度と個人理解度の乖離が無視できないレベルまで拡大している。
+                            </div>
+                        </div>
+
+                        <div class="flex items-center text-gray-300 font-bold justify-center scale-x-50">▶</div>
+
+                        <!-- Phase 2 -->
+                        <div class="phase-box bg-yellow-50 border-yellow-300">
+                            <div
+                                class="text-center border-b border-yellow-200 pb-0.5 mb-1 font-black text-[9pt] text-yellow-800 bg-yellow-100">
+                                Phase 2: 投入</div>
+                            <div
+                                class="bg-white p-1 rounded border border-yellow-100 text-[7.5pt] text-gray-700 leading-snug h-full text-justify flex-1">
+                                個別による「深い理解」とグループによる「広い知識」を同時注入。学習時間を強制的に倍増させ、生活習慣を受験生モードへ不可逆的に再構築する。
+                            </div>
+                        </div>
+
+                        <div class="flex items-center text-gray-300 font-bold justify-center scale-x-50">▶</div>
+
+                        <!-- Phase 3 -->
+                        <div class="phase-box bg-red-50 border-red-300 relative">
+                            <div
+                                class="text-center border-b border-red-200 pb-0.5 mb-1 font-black text-[9pt] text-red-800 bg-red-100">
+                                Phase 3: 突破</div>
+                            <div
+                                class="bg-white p-1 rounded border border-red-100 text-[7.5pt] text-gray-700 leading-snug h-full text-justify flex-1">
+                                基礎知識が有機的にネットワーク化され、300点の壁を突破。応用問題への対応力が開花し、380点到達と共に志望校合格が現実的な目標として可視化される。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT (Tools & CTA) -->
+            <div class="col-right">
+                <!-- Tools (60%) - Expanded for 4 Apps -->
+                <div class="section-container theme-purple h-[60%]">
+                    <div class="section-header header-purple">
+                        <div class="header-icon icon-purple"><i data-lucide="cpu" class="w-3 h-3"></i></div>
+                        独自導入ツール
+                    </div>
+                    <div class="white-box border-purple-200 flex-1 flex flex-col gap-px overflow-hidden">
+                        <p
+                            class="text-[7pt] leading-[1.15] text-slate-700 border-b border-purple-100 pb-0.5 text-justify shrink-0">
+                            これらは市販品ではなく、<span
+                                class="font-bold text-purple-900">現場講師の「生の声」と「アイデア」から独自開発</span>された完全オリジナルツールである。「指導最優先（現場主義）」を掲げる当校だけの、他塾には真似できない強力な差別化要因。
+                        </p>
+
+                        <!-- APP 01 -->
+                        <div
+                            class="bg-purple-50 p-0.5 rounded border border-purple-100 flex-1 flex flex-col justify-center min-h-0">
+                            <div class="flex items-center gap-1.5 mb-px">
+                                <span
+                                    class="bg-purple-600 text-white text-[7pt] font-bold px-1.5 rounded-full">APP01</span>
+                                <span class="font-bold text-purple-900 text-[8pt]">基礎学最前線</span>
+                            </div>
+                            <p class="text-[7pt] leading-[1.1] text-slate-700 text-justify">
+                                徹底した過去問分析に加え、他県入試傾向も網羅的に解析。徳島県基礎学・入試に対応する一歩先を見据えた戦略をAIが提示。
+                            </p>
+                        </div>
+
+                        <!-- APP 02 -->
+                        <div
+                            class="bg-purple-50 p-0.5 rounded border border-purple-100 flex-1 flex flex-col justify-center min-h-0">
+                            <div class="flex items-center gap-1.5 mb-px">
+                                <span
+                                    class="bg-purple-600 text-white text-[7pt] font-bold px-1.5 rounded-full">APP02</span>
+                                <span class="font-bold text-purple-900 text-[8pt]">中学理社攻略</span>
+                            </div>
+                            <p class="text-[7pt] leading-[1.1] text-slate-700 text-justify">
+                                隙間時間で重要語句を総点検。知識の漏れを物理的に塞ぎ、基礎点を底上げする。
+                            </p>
+                        </div>
+
+                        <!-- APP 03 -->
+                        <div
+                            class="bg-purple-50 p-0.5 rounded border border-purple-100 flex-[1.4] flex flex-col justify-center min-h-0">
+                            <div class="flex items-center gap-1.5 mb-px">
+                                <span
+                                    class="bg-purple-600 text-white text-[7pt] font-bold px-1.5 rounded-full">APP03</span>
+                                <span class="font-bold text-purple-900 text-[8pt]">英検大問1徹底攻略</span>
+                            </div>
+                            <p class="text-[7pt] leading-[1.1] text-slate-700 text-justify">
+                                高校・大学入試で強力な武器となる「英検」取得に特化。各級過去10年・全26回分の全問を完全収録し、最新回も毎回追加。圧倒的演習量で合否を分ける語彙問題を制圧し、最短期間で準2・2級合格を奪取する。<span
+                                    class="font-bold">入試優遇・加点獲得の切り札。</span>
+                            </p>
+                        </div>
+
+                        <!-- APP 04 -->
+                        <div
+                            class="bg-purple-50 p-0.5 rounded border border-purple-100 flex-[1.4] flex flex-col justify-center min-h-0">
+                            <div class="flex items-center gap-1.5 mb-px">
+                                <span
+                                    class="bg-purple-600 text-white text-[7pt] font-bold px-1.5 rounded-full">APP04</span>
+                                <span class="font-bold text-purple-900 text-[8pt]">中学英単語マスター</span>
+                            </div>
+                            <p class="text-[7pt] leading-[1.1] text-slate-700 text-justify">
+                                高校入試必須単語を重要度別に<span
+                                    class="font-bold text-purple-800">「Tier分類」</span>。頻出語彙から優先的に脳内定着させ、長文読解の基礎体力を盤石にするユニーク特化アプリ。入試本番で「読めない単語」をゼロにする徹底的な語彙強化を実現する。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA (40%) - Compacted -->
+                <div class="section-container theme-yellow h-[40%] shadow-lg border-amber-400 bg-white">
+                    <div class="text-center mb-0.5 bg-amber-50 rounded py-0.5 border border-amber-200 shrink-0">
+                        <h2 class="text-[9pt] font-black text-amber-900 leading-none">緊急告知：新学期生募集</h2>
+                    </div>
+
+                    <div class="flex-1 flex flex-col justify-between h-full gap-0.5 min-h-0">
+                        <div class="white-box border-amber-200 bg-amber-50 flex-1 justify-start overflow-hidden">
+                            <h3
+                                class="font-bold text-slate-800 text-[8.5pt] mb-0.5 flex items-center gap-1 border-b border-amber-200 pb-0.5">
+                                <i data-lucide="clipboard-list" class="w-3 h-3 text-amber-600"></i> 学習相談会 (現状分析)
+                            </h3>
+                            <p class="text-[7.5pt] leading-snug text-slate-700 text-justify">
+                                内容：直近の成績表を基に、300点突破までの「距離」と「具体策」を定量的に提示いたします。現在の学習手法に課題がある場合、その抜本的な見直しと最適化をご提案させていただきます。
+                            </p>
+                            <div class="bg-white px-1 py-0.5 border border-amber-100 rounded mt-auto">
+                                <p class="text-[7.5pt] leading-none text-slate-700 text-justify font-bold">
+                                    対象：新中3生および保護者 <span
+                                        class="font-normal text-[7pt] text-red-500">※定員に達し次第、締め切る場合がございます。</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="border-2 border-amber-400 rounded-lg p-0.5 text-center bg-white mt-auto shrink-0">
+                            <div class="text-[8px] font-bold text-slate-400 tracking-widest uppercase leading-none">
+                                CONTACT</div>
+                            <div class="text-[1.8rem] font-black text-slate-900 tracking-tighter leading-none my-0.5">
+                                00-0000-0000</div>
+                            <div
+                                class="flex items-center gap-1 bg-slate-50 p-1 rounded justify-center border border-slate-200">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sites.google.com/view/kyousitu-po-taru/%E3%83%9B%E3%83%BC%E3%83%A0"
+                                    class="w-8 h-8 border border-white shrink-0">
+                                <div class="text-left font-bold text-slate-700 text-[7.5pt] leading-tight flex-1">
+                                    Web予約受付中<br>
+                                    <span class="text-[7pt] font-normal text-slate-500">24時間対応/相談無料</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div
+            class="absolute bottom-1 right-3 text-[5pt] text-gray-400 font-medium z-10 w-full text-right bg-white/80 px-2">
+            ※本資料は2026年度入試に向けた内部部分析資料の一部を公開したものです。数値は目安であり合格を保証するものではありません。
+        </div>
+
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

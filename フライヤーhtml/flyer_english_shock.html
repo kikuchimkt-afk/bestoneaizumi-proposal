@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>English Curriculum Crisis Report (Portrait)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Global Settings */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #cbd5e1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 4px;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #cbd5e1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* Prevent top clipping */
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0;
+            /* Add scroll space */
+            overflow-y: auto;
+            /* Allow scrolling */
+            color: #0f172a;
+        }
+
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 6mm;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                overflow: visible;
+                height: auto;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .sheet {
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+                padding: 6mm;
+                margin: 0;
+                zoom: 92%;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+        }
+
+        /* Typography */
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .text-dense {
+            font-size: 8pt;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .text-micro {
+            font-size: 7pt;
+            line-height: 1.3;
+            color: #475569;
+        }
+
+        .section-header {
+            border-left: 5px solid #1e3a8a;
+            padding-left: 5px;
+            margin-bottom: 3mm;
+            font-size: 11pt;
+            font-weight: 900;
+            color: #1e3a8a;
+            line-height: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eff6ff;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+
+        /* Tables & Graphs */
+        .dense-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+
+        .dense-table th,
+        .dense-table td {
+            border: 1px solid #cbd5e1;
+            padding: 4px;
+        }
+
+        .dense-table th {
+            background: #f1f5f9;
+            font-weight: 700;
+            text-align: center;
+            color: #1e3a8a;
+        }
+
+        .bar-track {
+            width: 100%;
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-right: 4px;
+            justify-content: flex-end;
+            color: white;
+            font-size: 6pt;
+            font-weight: bold;
+        }
+
+        /* Layout Blocks */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4mm;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4mm;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sheet">
+        <!-- Header -->
+        <div class="h-[6%] border-b-4 border-blue-900 mb-4 flex justify-between items-end pb-2">
+            <div>
+                <div class="text-[8pt] font-bold text-rose-600 tracking-widest uppercase mb-1">Emergency Analysis Report
+                </div>
+                <h1 class="text-[22pt] font-black leading-none text-slate-900">新学習指導要領 <span
+                        class="text-blue-900">英語ショック</span><br><span
+                        class="text-[12pt] font-bold text-slate-500">激変する難易度と「中1の壁」の正体</span></h1>
+            </div>
+            <div class="text-right">
+                <div class="bg-blue-900 text-white text-[9pt] font-black px-3 py-1 mb-1 inline-block">2025年度版</div>
+                <div class="text-[8pt] font-bold text-slate-500">Analysis ID: #ENG-2025</div>
+            </div>
+        </div>
+
+        <!-- Section 1: The Quantity Shock -->
+        <div class="mb-4">
+            <div class="section-header">
+                01. 今、英語に何が起きているか（量的負荷の激増）
+                <span class="text-[7pt] text-slate-400 font-normal">MODULE: QUANTITY</span>
+            </div>
+
+            <div class="grid-2 mb-8">
+                <!-- Vocabulary Graph -->
+                <div class="border p-2 bg-slate-50 flex flex-col justify-between">
+                    <h3 class="text-[9pt] font-black mb-2 flex items-center gap-1"><i data-lucide="bar-chart-2"
+                            class="w-4 h-4"></i> 修了時習得単語数</h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-[8pt] font-bold mb-1">
+                                <span class="text-slate-500">親世代 (～2011)</span>
+                                <span>1,200語</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill bg-slate-400" style="width: 48%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[8pt] font-bold mb-1">
+                                <span class="text-blue-900">現行 (2021～)</span>
+                                <span class="text-rose-600 font-black">2,500語 (2.1倍)</span>
+                            </div>
+                            <div class="bar-track bg-blue-100">
+                                <div class="bar-fill bg-blue-600 w-full relative">
+                                    <div class="absolute right-1">MAX</div>
+                                </div>
+                            </div>
+                            <div class="flex text-[7pt] text-slate-500 mt-1 gap-2">
+                                <span class="font-bold">内訳:</span>
+                                <span>小学校 700語 (前提)</span>
+                                <span>+</span>
+                                <span>中学校 1800語 (追加)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit 1 Gap -->
+                <div class="border p-2 bg-white">
+                    <h3 class="text-[9pt] font-black mb-2 text-rose-700 flex items-center gap-1"><i
+                            data-lucide="alert-triangle" class="w-4 h-4"></i> Unit 1の「断絶」</h3>
+                    <table class="dense-table">
+                        <tr>
+                            <td class="bg-slate-100 w-[20%] text-center font-bold text-[7pt]">旧<br>教科書</td>
+                            <td class="bg-slate-50 text-[7pt]">
+                                <span class="font-bold block mb-1">Start slowly...</span>
+                                "I am Tanaka Kumi."<br>
+                                "You are Ken."<br>
+                                <span class="text-slate-400 text-[6pt]">※アルファベットから丁寧に</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-rose-100 w-[20%] text-center font-bold text-rose-800 text-[7pt]">新<br>教科書</td>
+                            <td class="bg-white border-rose-200 text-[7pt]">
+                                <span class="font-bold block mb-1 text-rose-600">Full throttle!</span>
+                                "I like soccer. I can play well."<br>
+                                "Do you like it?"<br>
+                                <span class="text-rose-500 text-[6pt] font-bold">※be動詞・一般動詞・助動詞が混在</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <p class="text-[8pt] mt-4 text-justify">
+                <span class="font-bold bg-yellow-200 px-1">小学校での「準備」が前提化。</span>
+                中1入学時点で600語以上の単語が「読めて書ける」状態でないと、4月の授業開始直後に脱落するカリキュラム構造になっている。
+            </p>
+        </div>
+
+        <!-- Section 2: Qualitative Change & Effect -->
+        <div class="mb-4 flex-grow">
+            <div class="section-header">
+                02. 評価基準の変化と「二極化」現象
+                <span class="text-[7pt] text-slate-400 font-normal">MODULE: QUALITY</span>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="mb-4">
+                <table class="dense-table">
+                    <thead>
+                        <tr>
+                            <th class="w-[15%]">比較項目</th>
+                            <th class="w-[42%] bg-slate-100 text-slate-500">旧基準 (Knowledge Base)</th>
+                            <th class="w-[43%] bg-blue-50 text-blue-900 border-blue-300">新基準 (Competency Base)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bg-slate-50 font-bold text-center">授業スタイル</td>
+                            <td>
+                                <div class="font-bold text-slate-700">訳読・文法解説</div>
+                                先生が日本語で説明し、生徒は板書を写す。<br>「正解」を覚えることがゴール。
+                            </td>
+                            <td class="bg-white font-bold text-blue-900">
+                                <div class="font-bold text-blue-700">All English & Output</div>
+                                授業の大半が英語。文法用語は使わず、<br>ペアワークで「自分の考え」を話す。
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-slate-50 font-bold text-center">定期テスト</td>
+                            <td>
+                                <div class="font-bold text-slate-700">知識再生型</div>
+                                教科書本文の穴埋めや対訳。<br>暗記だけで80点以上が可能だった。
+                            </td>
+                            <td class="bg-white font-bold text-blue-900">
+                                <div class="font-bold text-blue-700">思考・表現型</div>
+                                初見の長文読解と、30語以上の英作文。<br>暗記だけでは50点も取れない。
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-slate-50 font-bold text-center">入試傾向</td>
+                            <td>
+                                <div class="font-bold text-slate-700">減点法 (Accuracy)</div>
+                                細かいスペルミスや文法ミスを許さない<br>「ミスの少なさ」を競う競争。
+                            </td>
+                            <td class="bg-white font-bold text-blue-900">
+                                <div class="font-bold text-blue-700">加点法 (Fluency)</div>
+                                多少の間違いはあっても、大量の情報を処理し<br>論理的に意見を述べる力が問われる。
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Polarization Chart (Visual) -->
+            <div class="border p-2 bg-gradient-to-b from-slate-50 to-white relative h-[140px]">
+                <h4 class="text-[8pt] font-black text-slate-800 absolute top-2 left-2">▼ 得点分布の「フタコブラクダ」化</h4>
+
+                <div class="flex items-end justify-between h-full w-full px-8 pt-6 pb-4 gap-1">
+                    <!-- Low Group -->
+                    <div class="w-1/6 bg-rose-500 h-[60%] relative group">
+                        <div
+                            class="absolute top-2 left-0 w-full text-center text-[7pt] font-bold text-white z-50 drop-shadow-md">
+                            30点層<br>(基礎崩壊)</div>
+                    </div>
+                    <div class="w-1/6 bg-rose-300 h-[30%]"></div>
+
+                    <!-- Middle (Empty) -->
+                    <div class="w-1/3 border-b-2 border-dashed border-slate-300 h-[5%] relative">
+                        <div class="absolute -top-4 w-full text-center text-[7pt] text-slate-400 font-bold">中間層の消滅</div>
+                    </div>
+
+                    <!-- High Group -->
+                    <div class="w-1/6 bg-blue-300 h-[30%]"></div>
+                    <div class="w-1/6 bg-blue-600 h-[80%] relative">
+                        <div
+                            class="absolute top-2 left-0 w-full text-center text-[7pt] font-bold text-white z-50 drop-shadow-md">
+                            90点層<br>(Top Tier)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Solution -->
+        <div>
+            <div class="section-header">
+                03. 唯一の対抗策「先取り×英検」戦略
+                <span class="text-[7pt] text-slate-400 font-normal">MODULE: SOLUTION</span>
+            </div>
+
+            <div class="grid-3 h-[180px]">
+                <!-- Step 1 -->
+                <div class="border border-slate-300 p-2 bg-white flex flex-col">
+                    <div
+                        class="bg-slate-200 text-slate-700 font-bold text-[7pt] px-2 py-0.5 inline-block w-fit rounded mb-2">
+                        戦略 01</div>
+                    <h3 class="text-[10pt] font-black text-rose-600 mb-1">小学校時代の貯金</h3>
+                    <p class="text-[7pt] text-justify leading-tight">
+                        中1の「Unit 1」で躓かないために、小6までに英単語600語（書けるレベル）を完成させる。これが全ての土台となる。
+                    </p>
+                    <div class="mt-auto pt-2 border-t border-dashed border-slate-200 text-center">
+                        <span class="text-[7pt] font-bold text-slate-500">Target:</span>
+                        <div class="text-[10pt] font-black text-slate-800">英検 5級・4級</div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="border-2 border-blue-500 p-2 bg-blue-50 flex flex-col shadow-lg transform scale-105 z-10">
+                    <div
+                        class="bg-blue-600 text-white font-bold text-[7pt] px-2 py-0.5 inline-block w-fit rounded mb-2">
+                        戦略 02 (最重要)</div>
+                    <h3 class="text-[10pt] font-black text-blue-800 mb-1">中2での準2級取得</h3>
+                    <p class="text-[7pt] text-justify leading-tight">
+                        学校進度を無視して進む。中2終わりまでに「高校中級レベル（準2級）」を取得すれば、高校入試の英語は「満点」が狙える得意科目に変わる。
+                    </p>
+                    <div class="mt-auto pt-2 border-t border-blue-200 text-center">
+                        <span class="text-[7pt] font-bold text-blue-600">Target:</span>
+                        <div class="text-[12pt] font-black text-blue-900">英検 準2級</div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="border border-slate-300 p-2 bg-white flex flex-col">
+                    <div
+                        class="bg-slate-200 text-slate-700 font-bold text-[7pt] px-2 py-0.5 inline-block w-fit rounded mb-2">
+                        戦略 03</div>
+                    <h3 class="text-[10pt] font-black text-slate-800 mb-1">ハイブリッド学習</h3>
+                    <p class="text-[7pt] text-justify leading-tight">
+                        ・アプリで単語を無限演習<br>
+                        ・対面授業で長文読解の思考法<br>
+                        この役割分担で効率を最大化する。
+                    </p>
+                    <div class="mt-auto pt-2 border-t border-dashed border-slate-200 text-center">
+                        <span class="text-[7pt] font-bold text-slate-500">Method:</span>
+                        <div class="text-[10pt] font-black text-slate-800">Input <span class="text-xs">x</span> Output
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer CTA -->
+            <div
+                class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-3 mt-4 flex justify-between items-center rounded-sm">
+                <div>
+                    <div class="text-[9pt] font-bold text-blue-200 mb-0.5">英語は「積み上げ科目」。一度崩れると修復困難です。</div>
+                    <div class="text-[12pt] font-black">まずは「現在の語彙力・文法力」を無料診断します。</div>
+                </div>
+                <div class="bg-yellow-400 text-blue-900 font-black px-4 py-2 text-[10pt] shadow-lg cursor-pointer">
+                    体験授業を予約する
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

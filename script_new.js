@@ -116,7 +116,14 @@ const DEFAULT_STRATEGIES = [
     '現状維持（学校進度フォロー・自習メイン）'
 ];
 
-// Storage Keys
+const DESIGN_THEMES = {
+    'navy': { name: '📘 スタンダード・ネイビー', main: '#003366', sub: '#0095d9', bg: '#fff' },
+    'green': { name: '🌿 グロース・グリーン', main: '#2E7D32', sub: '#558B2F', bg: '#f9fdf0' },
+    'red': { name: '🔥 パッション・レッド', main: '#B71C1C', sub: '#D32F2F', bg: '#fff5f5' },
+    'gold': { name: '👑 プレミアム・ゴールド', main: '#333333', sub: '#D4AF37', bg: '#fff' },
+    'sakura': { name: '🌸 サクラ・サクセス', main: '#C2185B', sub: '#E91E63', bg: '#fff0f5' }
+};
+
 // Storage Keys
 const KEY_CUSTOM_TRAITS = 'custom_traits';
 const KEY_CUSTOM_NOTES = 'custom_notes';
@@ -149,7 +156,6 @@ const QUESTION_SETS = {
         },
         { id: 'current_score_test', label: '【現在】実力テストor基礎学力テスト（5科）', type: 'test_score_5' },
 
-
         { id: 'subject_strategies', label: '教科別指導方針 & 本人の印象', type: 'strategy_selector' },
 
         // --- 生徒の特徴・悩み (選択式) ---
@@ -161,7 +167,10 @@ const QUESTION_SETS = {
 
         // --- 特記事項・カリキュラム (選択式) ---
         { id: 'plan_curriculum_checks', label: '特記事項・カリキュラム要望', type: 'checkbox_group', options: CURRICULUM_NOTES, storageKey: KEY_CUSTOM_NOTES },
-        { id: 'plan_curriculum', label: 'その他 要望詳細（自由記述）', type: 'textarea' }
+        { id: 'plan_curriculum', label: 'その他 要望詳細（自由記述）', type: 'textarea' },
+
+        // --- デザインテーマ選択 ---
+        { id: 'design_theme', label: '出力デザインテーマ', type: 'select', options: Object.values(DESIGN_THEMES).map(t => t.name) }
     ],
     current: [
         { id: 'student_name', label: '生徒名（様なし）', type: 'text', placeholder: '例：徳島 太郎' },
@@ -194,7 +203,10 @@ const QUESTION_SETS = {
         { id: 'proposal_courses', label: '追加・変更提案コース作成', type: 'proposal_builder' },
 
         { id: 'plan_curriculum_checks', label: '特記事項・要望', type: 'checkbox_group', options: CURRICULUM_NOTES, storageKey: KEY_CUSTOM_NOTES },
-        { id: 'plan_curriculum', label: 'その他（記述）', type: 'textarea' }
+        { id: 'plan_curriculum', label: 'その他（記述）', type: 'textarea' },
+
+        // --- デザインテーマ選択 ---
+        { id: 'design_theme', label: '出力デザインテーマ', type: 'select', options: Object.values(DESIGN_THEMES).map(t => t.name) }
     ],
     english: [
         { id: 'student_name', label: '受講生名', type: 'text' },
@@ -972,7 +984,10 @@ async function generateProposal(statusElement, mode = 'simple') {
 
     ## 生徒の人物像・ニーズ
     - 特徴・悩み: ${traits} ${otherIssues}
-- 要望・特記事項: ${notes} ${otherNotes}
+    - 要望・特記事項: ${notes} ${otherNotes}
+    
+    ★重要: 特記事項に「書式」「行間」「文字サイズ」「文章量」などの指示がある場合は、出力内容（HTMLタグ含む）に直接反映させてください。
+    例: 「文字を大きく」→重要箇所を<b>タグで囲む、「行間広く」→改行<br>を多めに入れる、「文章量少なく」→箇条書きで簡潔にする等。
     
     ## 指定された指導方針
     ${userPolicies}
@@ -998,7 +1013,8 @@ Markdown記法やコードブロックは含めず、純粋なJSON文字列の�
 
     prompt += `
     ## JSONキー構造:
-- title: 提案書のタイトル（例: 「〇〇様 学習プランご提案書」「志望校合格への戦略プラン」など、ふさわしいものを生成）。
+    - title: 提案書のタイトル（例: 「志望校合格への戦略的学習プラン提案書」「逆転合格ロードマップ」など）。
+             **注意: ここに生徒名（〇〇様）を含めないでください。生徒名はヘッダーの別枠に自動表示されます。**
 - intro: 導入の挨拶（生徒の性格や悩みに寄り添い、「大手の塾とは違う」という親身さを感じさせる言葉。100文字程度）
 - analysis:
 現状分析とギャップ解消戦略（HTML形式 < ul > <li>...</li></ul >）。
@@ -1076,16 +1092,45 @@ Markdown記法やコードブロックは含めず、純粋なJSON文字列の�
             // モデル名を抽出 (models/gemini-pro -> gemini-pro)
             let allNames = availableModels.map(m => m.name.replace("models/", ""));
 
-            // 優先順位付け: 2.0 -> Pro -> Flash (non-lite) -> その他
+            // 優先順位付け: 1.5 Pro (Quality) -> 2.0 (Smart) -> 1.5 Flash
+            // ホワイトリスト方式に変更: 確実に動作するモデルのみを許可する
+            // ホワイトリスト方式: リクエストに基づき 2.0/2.5/3.0 系も許可 (Pro/Flashのみ)
+            const ALLOWED_SERIES = [
+                'gemini-1.5-pro', 'gemini-1.5-flash',
+                'gemini-2.0-pro', 'gemini-2.0-flash',
+                'gemini-2.5-pro', 'gemini-2.5-flash',
+                'gemini-3.0-pro', 'gemini-3.0-flash',
+                'gemini-3-pro', 'gemini-3-flash' // 表記ゆれ対応
+            ];
+
+            allNames = allNames.filter(n => {
+                // 絶対に除外すべき有害・課金・プレビュー特殊モデル
+                if (n.includes('computer-use')) return false;
+                if (n.includes('robotics')) return false;
+                if (n.includes('image-generation')) return false;
+                if (n.includes('image-preview')) return false;
+                if (n.includes('tts')) return false; // 音声生成も除外
+
+                // ホワイトリストチェック
+                return ALLOWED_SERIES.some(series => n.includes(series));
+            });
+
             allNames.sort((a, b) => {
                 const getScore = (name) => {
                     let score = 0;
-                    if (name.includes("2.0")) score += 10;
-                    if (name.includes("exp")) score += 5;
-                    if (name.includes("pro")) score += 4;
-                    if (name.includes("flash") && !name.includes("lite")) score += 3;
-                    if (name.includes("1.5")) score += 1;
-                    if (name.includes("lite")) score -= 50; // Liteは避ける
+                    // 新しいバージョンほど優先
+                    if (name.includes("gemini-3")) score += 300;
+                    else if (name.includes("gemini-2.5")) score += 200;
+                    else if (name.includes("gemini-2.0")) score += 100;
+                    else if (name.includes("gemini-1.5")) score += 50;
+
+                    // Pro > Flash
+                    if (name.includes("pro")) score += 20;
+                    if (name.includes("flash")) score += 10;
+
+                    if (name.includes("latest")) score += 5;
+                    if (name.includes("exp")) score += 1; // Experimentalは少し優先
+
                     return score;
                 };
                 return getScore(b) - getScore(a);
@@ -1100,28 +1145,16 @@ Markdown記法やコードブロックは含めず、純粋なJSON文字列の�
     }
 
     // モデル候補リスト構築
-    // APIから取得できた場合はそれを使い、ダメなら念の為のバックアップリストを使う
     let modelCandidates = [];
 
     if (candidatesFromApi.length > 0) {
-        // Re-prioritize: Pro is best for quality. Avoid experimental flash if quality is low.
-        // Sort: 1.5-pro -> 1.5-flash -> pro -> others
-        candidatesFromApi.sort((a, b) => {
-            const score = (name) => {
-                if (name.includes('gemini-1.5-pro')) return 100;
-                if (name.includes('gemini-1.5-flash')) return 80;
-                if (name.includes('gemini-pro')) return 60;
-                if (name.includes('2.0')) return 10; // Deprioritize 2.0 based on user feedback
-                return 0;
-            };
-            return score(b) - score(a);
-        });
         modelCandidates = candidatesFromApi;
     } else {
+        // Fallback: リクエストに基づき最新系も含める
         modelCandidates = [
+            "gemini-2.0-flash-exp",
             "gemini-1.5-pro",
-            "gemini-1.5-flash",
-            "gemini-pro"
+            "gemini-1.5-flash"
         ];
     }
 
@@ -1297,6 +1330,23 @@ function generateB4HTML(state, data) {
         roadmap: safeRender(data.roadmap)
     };
 
+    // Determine Theme
+    let themeKey = 'navy'; // Default
+    if (state.answers.design_theme) {
+        const selectedName = state.answers.design_theme;
+        const found = Object.keys(DESIGN_THEMES).find(k => DESIGN_THEMES[k].name === selectedName);
+        if (found) themeKey = found;
+    }
+    const theme = DESIGN_THEMES[themeKey];
+
+    // CSS Variables for dynamic styling
+    const cssVars = `
+        --c-main: ${theme.main};
+        --c-sub: ${theme.sub};
+        --c-bg: ${theme.bg};
+        --c-text: #333;
+    `;
+
     return `
 <!DOCTYPE html>
 <html lang="ja">
@@ -1304,6 +1354,9 @@ function generateB4HTML(state, data) {
     <meta charset="UTF-8">
     <title>${safeData.title}</title>
     <style>
+        :root {
+            ${cssVars}
+        }
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap');
         
         @page {
@@ -1315,8 +1368,8 @@ function generateB4HTML(state, data) {
             font-family: 'Noto Serif JP', serif;
             margin: 0;
             padding: 10mm;
-            background: #fff;
-            color: #333;
+            background: var(--c-bg); /* Theme Bg */
+            color: var(--c-text);
             box-sizing: border-box;
             width: 364mm; 
             height: 257mm; 
@@ -1335,33 +1388,24 @@ function generateB4HTML(state, data) {
         /* --- Header --- */
         .header-area {
             display: flex;
-            align-items: bottom;
+            align-items: flex-end; /* Align bottom to match text baselines if needed, or center */
             justify-content: space-between;
-            border-bottom: 2px solid #003366;
+            border-bottom: 2px solid var(--c-main); /* Theme Main */
             padding-bottom: 5px;
         }
-        .header-left {
-            font-size: 24pt;
-            font-weight: bold;
-            color: #0095d9; /* ECC Blue */
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-        .header-sub {
-            font-size: 10pt;
-            color: #666;
-            margin-left: 10px;
-        }
-        .header-right {
-            text-align: right;
-        }
+        /* header-left-section and header-right-section are div containers */
+        
         .header-title-text {
-            font-size: 16pt;
+            font-size: 20pt; /* Increased size for emphasis */
             font-weight: bold;
             font-family: 'Noto Serif JP', serif;
+            color: var(--c-main);
+            line-height: 1.1;
         }
         .header-meta {
-            font-size: 9pt;
+            font-size: 11pt;
             color: #444;
+            margin-top: 5px;
         }
 
         /* --- Intro --- */
@@ -1387,7 +1431,7 @@ function generateB4HTML(state, data) {
 
         /* --- Boxes --- */
         .box {
-            border: 1px solid #0095d9;
+            border: 1px solid var(--c-sub); /* Theme Sub */
             border-radius: 6px;
             padding: 0;
             background: #fff;
@@ -1396,19 +1440,32 @@ function generateB4HTML(state, data) {
             flex-direction: column;
             overflow: hidden;
         }
-        .box-blue { border-color: #0095d9; }
+        /* Specific borders can override if needed, but using theme generally */
+        .box-blue { border-color: var(--c-sub); }
         .box-orange { border-color: #f08c00; }
-        .box-green { border-color: #008a00; }
-        .box-gray { border-color: #666; }
-
+        
         .box-header {
             color: #fff;
             font-family: 'Noto Sans JP', sans-serif;
             font-weight: bold;
             font-size: 10.5pt;
             padding: 3px 10px;
+            background: var(--c-main); /* Theme Main */
         }
-        .bg-blue { background: #0095d9; }
+        
+        /* Specific Box Styling */
+        .schedule-box .box-header { background: #666; } /* Schedule stays neutral/gray */
+        .schedule-box { border-color: #666; }
+        
+        .message-box .box-header { 
+            background: ${themeKey === 'gold' ? '#D4AF37' : (themeKey === 'red' ? '#D32F2F' : '#f08c00')}; 
+        } 
+        .message-box { 
+             border-color: ${themeKey === 'gold' ? '#D4AF37' : (themeKey === 'red' ? '#D32F2F' : '#f08c00')};
+        }
+
+        /* Old bg classes - keeping for safety but overridden by selectors above or below */
+        .bg-blue { background: var(--c-main); }
         .bg-orange { background: #f08c00; }
         .bg-green { background: #008a00; }
         .bg-gray { background: #555; }
@@ -1483,13 +1540,15 @@ function generateB4HTML(state, data) {
 </head>
 <body>
     <div class="header-area">
-        <div>
-            <span class="header-left">${schoolName}</span>
-            <span class="header-sub">個別指導塾 / 英会話</span>
-        </div>
-        <div class="header-right">
+        <div class="header-left-section">
             <div class="header-title-text">${safeData.title}</div>
             <div class="header-meta">${state.answers.student_name || '生徒'} 様 &nbsp;&nbsp; ${dateStr}</div>
+        </div>
+        <div class="header-right-section" style="text-align:right;">
+            <!-- Logo if available, else text -->
+            ${logoSrc ? `<img src="${logoSrc}" style="max-height:40px; vertical-align:middle;">` : ''}
+            <span class="header-school-name" style="font-size:14pt; margin-left:10px; color:#666; font-weight:bold; font-family:'Noto Sans JP';">${schoolName}</span>
+            <div style="font-size:9pt; color:#888;">個別指導塾 / 英会話</div>
         </div>
     </div>
 

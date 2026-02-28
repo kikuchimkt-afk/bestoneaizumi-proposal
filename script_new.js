@@ -67,6 +67,27 @@ const TOKUSHIMA_CONTEXT = `
 - **市立**: 350点
 - **城北**: 320点
 
+【徳島県中学校基礎学力テスト（基礎学）の詳細】
+■ 実施時期と各回の位置づけ:
+- **第1回（10月）**: 中3の最初の基礎学。中1〜中3の1学期までの範囲。ここで「現在地」を正確に把握する。志望校判定の第一関門。この結果で危機感を持てるかどうかが合否を分ける。
+- **第2回（11月）**: 第1回から約1ヶ月。短期間でどれだけ伸びたかが試される。ここで伸びていれば「正しい努力」が証明される。三者面談の材料になるため、私立併願パターンにも影響大。
+- **第3回（1月）**: 最終回。ここが事実上の「入試予行演習」。この点数が志望校最終決定の最大材料。第3回で目標点を取れれば自信を持って入試に臨める。取れなければ志望校変更を迫られる。
+
+■ 教科別配点:
+- 各教科100点満点 × 5教科 = **500点満点**
+- 英語・数学は差がつきやすく、理科・社会は短期間で伸ばしやすい
+- 国語は安定しやすいが記述問題で差がつく
+
+■ 得点推移の読み方:
+- 第1回→第2回で**20点以上アップ**: 学習方法が正しい。このペースを維持。
+- 第1回→第2回で**変化なし or 微増**: 学習の質に問題あり。方法の見直しが急務。
+- 第1回→第2回で**下降**: 危険信号。基礎の穴が拡大している可能性。緊急対策が必要。
+- 第2回→第3回の伸びは「直前の追い込み力」を示す。理社の暗記マラソンが効きやすい時期。
+
+■ 中1・中2の場合:
+- 基礎学力テストは中3で実施されるが、中1・中2の段階では「実力テスト」「校内テスト」の結果が基礎学の予測指標となる。
+- 中2の1月時点で300点未満の場合、中3の基礎学で320点（安全圏）到達は険しい道のり。早期の介入が必要。
+
 この情報を踏まえ、AIは単なる学習塾ではなく「徳島の入試戦略家」として振る舞ってください。
 `;
 
@@ -154,7 +175,10 @@ const QUESTION_SETS = {
                 { id: 'exam_month', label: '受験月', type: 'select', options: ['3月(一般)', '2月(推薦/私立)', '1月(中学受験/高専)'] }
             ]
         },
-        { id: 'current_score_test', label: '【現在】実力テストor基礎学力テスト（5科）', type: 'test_score_5' },
+        { id: 'current_score_test', label: '【現在】直近の実力テスト or 基礎学力テスト（5科）', type: 'test_score_5' },
+
+        // --- 基礎学力テスト得点推移（中3向け） ---
+        { id: 'kisogaku_scores', label: '📊 基礎学力テスト 得点推移（中3生は入力推奨）', type: 'kisogaku_scores' },
 
         { id: 'subject_strategies', label: '教科別指導方針 & 本人の印象', type: 'strategy_selector' },
 
@@ -193,7 +217,10 @@ const QUESTION_SETS = {
                 { id: 'exam_month', label: '受験月', type: 'select', options: ['3月(一般)', '2月(推薦/私立)', '1月(中学受験/高専)'] }
             ]
         },
-        { id: 'current_score_test', label: '【現在】実力テストor基礎学力テスト（5科）', type: 'test_score_5' },
+        { id: 'current_score_test', label: '【現在】直近の実力テスト or 基礎学力テスト（5科）', type: 'test_score_5' },
+
+        // --- 基礎学力テスト得点推移（中3向け） ---
+        { id: 'kisogaku_scores', label: '📊 基礎学力テスト 得点推移（中3生は入力推奨）', type: 'kisogaku_scores' },
 
         { id: 'subject_strategies', label: '教科別指導方針 & 本人の印象', type: 'strategy_selector' },
 
@@ -529,6 +556,34 @@ function collectFormData() {
             if (scoreStr) scoreStr += `(5科計: ${total}点)`;
             state.answers[id] = scoreStr.trim();
 
+        } else if (type === 'kisogaku_scores') {
+            // 基礎学テスト各回の得点を収集
+            const KISOGAKU_ROUNDS = [
+                { key: 'kisogaku_1', label: '第1回（10月）' },
+                { key: 'kisogaku_2', label: '第2回（11月）' },
+                { key: 'kisogaku_3', label: '第3回（1月）' }
+            ];
+            let allRoundsStr = '';
+            KISOGAKU_ROUNDS.forEach(round => {
+                const roundInputs = group.querySelectorAll(`input[data-round="${round.key}"]`);
+                let roundStr = '';
+                let roundTotal = 0;
+                let hasData = false;
+                roundInputs.forEach(inp => {
+                    const sub = inp.dataset.subject;
+                    const val = inp.value;
+                    if (val && !isNaN(parseInt(val))) {
+                        roundStr += `${sub}:${val}点 `;
+                        roundTotal += parseInt(val);
+                        hasData = true;
+                    }
+                });
+                if (hasData) {
+                    allRoundsStr += `${round.label}: ${roundStr}(合計:${roundTotal}点)\n`;
+                }
+            });
+            state.answers[id] = allRoundsStr.trim();
+
         } else if (type === 'strategy_selector') {
             // Collect strategies + impressions
             let policies = [];
@@ -645,6 +700,8 @@ function renderField(q, parentContainer) {
 
     } else if (q.type === 'test_score_5') {
         renderTestScore5(div, q);
+    } else if (q.type === 'kisogaku_scores') {
+        renderKisogakuScores(div, q);
     } else if (q.type === 'strategy_selector') {
         renderStrategySelector(div, q);
     } else if (q.type === 'checkbox_group') {
@@ -682,6 +739,111 @@ function renderTestScore5(container, q) {
         wrapper.appendChild(item);
     });
     container.appendChild(wrapper);
+}
+
+function renderKisogakuScores(container, q) {
+    const KISOGAKU_ROUNDS = [
+        { key: 'kisogaku_1', label: '第1回（10月）', color: '#1976D2' },
+        { key: 'kisogaku_2', label: '第2回（11月）', color: '#388E3C' },
+        { key: 'kisogaku_3', label: '第3回（1月）', color: '#D32F2F' }
+    ];
+
+    // 既存データのパース
+    const existingData = state.answers[q.id] || '';
+    const parsedRounds = {};
+    existingData.split('\n').forEach(line => {
+        KISOGAKU_ROUNDS.forEach(round => {
+            if (line.startsWith(round.label)) {
+                const scoreMap = {};
+                const parts = line.replace(round.label + ': ', '').split(' ');
+                parts.forEach(part => {
+                    const match = part.match(/(\S+):(\d+)点/);
+                    if (match) scoreMap[match[1]] = match[2];
+                });
+                parsedRounds[round.key] = scoreMap;
+            }
+        });
+    });
+
+    const outerWrapper = document.createElement('div');
+    outerWrapper.style.cssText = 'border:1px solid #ddd; border-radius:8px; padding:12px; background:#fafbfc;';
+
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:0.8rem; color:#888; margin:0 0 10px; line-height:1.4;';
+    hint.textContent = '※受験済みの回のみ入力してください。未受験の回は空欄のままで構いません。得点推移をAIが分析し、戦略に反映します。';
+    outerWrapper.appendChild(hint);
+
+    const gridWrapper = document.createElement('div');
+    gridWrapper.style.cssText = 'display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;';
+
+    KISOGAKU_ROUNDS.forEach(round => {
+        const roundDiv = document.createElement('div');
+        roundDiv.style.cssText = `border:2px solid ${round.color}; border-radius:6px; overflow:hidden;`;
+
+        const roundHeader = document.createElement('div');
+        roundHeader.style.cssText = `background:${round.color}; color:#fff; font-weight:bold; font-size:0.85rem; padding:4px 8px; text-align:center;`;
+        roundHeader.textContent = round.label;
+        roundDiv.appendChild(roundHeader);
+
+        const inputsDiv = document.createElement('div');
+        inputsDiv.style.cssText = 'padding:8px; display:flex; flex-direction:column; gap:4px;';
+
+        let totalDisplay = null;
+
+        SUBJECTS.forEach(sub => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex; align-items:center; gap:4px;';
+
+            const subLabel = document.createElement('span');
+            subLabel.style.cssText = 'width:32px; font-size:0.8rem; font-weight:bold; color:#555;';
+            subLabel.textContent = sub;
+
+            const inp = document.createElement('input');
+            inp.type = 'number';
+            inp.min = '0';
+            inp.max = '100';
+            inp.placeholder = '点';
+            inp.dataset.round = round.key;
+            inp.dataset.subject = sub;
+            inp.style.cssText = 'flex:1; padding:4px 6px; border:1px solid #ccc; border-radius:4px; text-align:center; font-size:0.85rem; min-width:0;';
+
+            // 既存データの復元
+            if (parsedRounds[round.key] && parsedRounds[round.key][sub]) {
+                inp.value = parsedRounds[round.key][sub];
+            }
+
+            // 合計自動計算
+            inp.addEventListener('input', () => {
+                let total = 0;
+                const allInputs = roundDiv.querySelectorAll(`input[data-round="${round.key}"]`);
+                allInputs.forEach(i => {
+                    if (i.value && !isNaN(parseInt(i.value))) total += parseInt(i.value);
+                });
+                if (totalDisplay) totalDisplay.textContent = `合計: ${total}点`;
+            });
+
+            row.appendChild(subLabel);
+            row.appendChild(inp);
+            inputsDiv.appendChild(row);
+        });
+
+        // 合計表示
+        totalDisplay = document.createElement('div');
+        totalDisplay.style.cssText = `font-weight:bold; text-align:center; padding:4px; margin-top:4px; border-top:1px solid #eee; font-size:0.85rem; color:${round.color};`;
+        // 初期値計算
+        let initTotal = 0;
+        if (parsedRounds[round.key]) {
+            Object.values(parsedRounds[round.key]).forEach(v => { initTotal += parseInt(v) || 0; });
+        }
+        totalDisplay.textContent = `合計: ${initTotal}点`;
+        inputsDiv.appendChild(totalDisplay);
+
+        roundDiv.appendChild(inputsDiv);
+        gridWrapper.appendChild(roundDiv);
+    });
+
+    outerWrapper.appendChild(gridWrapper);
+    container.appendChild(outerWrapper);
 }
 
 function renderStrategySelector(container, q) {
@@ -949,6 +1111,10 @@ async function generateProposal(statusElement, mode = 'simple') {
     const otherNotes = state.answers['plan_curriculum'] || '';
 
     // Construct Prompt
+    // 基礎学テスト得点推移データの取得
+    const kisogakuData = state.answers['kisogaku_scores'] || '';
+    const hasKisogakuData = kisogakuData.trim().length > 0;
+
     let prompt = `
 あなたは、徳島県の高校入試事情（特に「基礎学力テスト」の重要性）を知り尽くした、個別指導塾「${schoolName}」の地域密着型教育コンサルタントです。
 大手塾（Axis, IE, 明光など）のマニュアル化された対応ではなく、地方の生徒一人ひとりの「生々しい現実（部活、スマホ、基礎学力不足）」に即した、具体的かつ愛のある受講提案書を作成してください。
@@ -959,7 +1125,29 @@ async function generateProposal(statusElement, mode = 'simple') {
     ## 最重要: ギャップ分析と合格戦略（徳島モデル）
 1. ** 現在地とゴールの乖離 **: 「現在の実力テスト得点」と「志望校ボーダー（基礎学力テスト目標点）」を比較し、合計で ** あと何点足りないか ** を明確にしてください。
 2. **「基礎学」突破戦略 **: 足りない点数を補うために、ユーザーが指定した【各教科の指導方針】や【生徒の教科への印象】を考慮し、「どの教科で何点アップさせるのが現実的か」を具体的に戦略立ててください。
+`;
 
+    // 基礎学テストデータがある場合、追加の分析指示をプロンプトに注入
+    if (hasKisogakuData) {
+        prompt += `
+    ## ★最重要★ 基礎学力テスト得点推移の分析
+    以下に生徒の基礎学力テスト各回の得点データがあります。これを最大限活用してください。
+
+    【基礎学テスト得点データ】
+    ${kisogakuData}
+
+    このデータに基づき、以下の分析を「現状の分析・課題」(analysis)セクションに必ず含めてください:
+    1. **得点推移の傾向**: 回を追うごとに伸びているか、停滞・下降しているかを明確に指摘
+    2. **教科別の強弱分析**: 各教科の得点から「伸びしろのある教科」「得点源にすべき教科」「テコ入れ必須の教科」を特定
+    3. **志望校ボーダーとの距離**: 最新の基礎学合計点と志望校ボーダーの差を数値で示し、「あと何点、どの教科で稼ぐか」を具体的に提案
+    4. **次回基礎学の目標点**: 次に受ける基礎学（未受験の回）での教科別目標点を設定
+
+    また「目標設定」(goals)セクションでも、基礎学テストの各回目標点を具体的に記載してください（例:「第2回基礎学で合計340点達成」）。
+    ロードマップにも基礎学テストの日程（10月・11月・1月）を明確にマイルストーンとして組み込んでください。
+`;
+    }
+
+    prompt += `
     ## 提案プラン作成の指示(松・竹・梅の3プラン提案)
 保護者が予算と成果のバランスを選べるよう、以下の3つのプランを必ず提案してください。
     ** 当校の推奨はあくまで「プランA」であり、プランAこそが志望校合格への王道（最短ルート）であることを強調してください。**
